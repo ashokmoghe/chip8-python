@@ -18,6 +18,7 @@ class Interpreter():
         self.V = bytearray(REGSIZE)
         self.I = random.randint(0, MEMSIZE)
         self.PC = CHIP8_STRT
+        self.stack = []
         self.Instr_H = 0x00
         self.Instr_L = 0x00
         self.Instr_HH = 0x0
