@@ -1,13 +1,6 @@
 # Python emulator for Chip-8
 import random
-
-MODBYTE = 0x100
-MODNIB = 0x10
-BYTEMASK = 0xFF
-NIBMASK = 0x0F
-MEMSIZE = 0x1000
-REGSIZE = 0x10
-CHIP8_STRT = 0x200
+import constants
 
 class Interpreter():
     def __init__(self):
@@ -67,7 +60,7 @@ while True:
     if (i.Instr_HH == 6):    #Set Vx = KK
         i.V[i.Instr_HL] = i.Instr_L
     if (i.Instr_HH == 7):    #Set Vx = Vx + KK
-        i.V[i.Instr_HL] = (i.V[i.Instr_HL] + i.Instr_L) % MODBYTE
+        i.V[register_x] = (i.V[register_x]  + i.Instr_L) % MODBYTE
     if (i.Instr_HH == 9):    #Skip if Vx != Vy
         if (i.V[i.Instr_HL] == i.V[i.Instr_LH]):
             i.skip()
