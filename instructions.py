@@ -47,7 +47,7 @@ def group_7(i, register_x, lower_byte):
 def group_8(i, register_x, register_y, subop):
     vx = i.V[register_x]
     vy = i.V[register_y]
-    vf = 0
+    vf = i.V[0xF]
     temp = 0
     if (subop == 0):
         temp = vy
@@ -59,21 +59,22 @@ def group_8(i, register_x, register_y, subop):
         temp = (vx ^ vy)
     elif (subop == 4):
         temp = (vx + vy)
+        if (temp > BYTEMASK): vf = 1
     elif (subop == 5):
         temp = (vx - vy)
+        if (vx >= vy): vf = 1
     elif (subop == 6):
-        temp = (vx >> 1)
-        vf = vx & 0x1
+        temp = (vy >> 1)
+        vf = vy & 0x1
     elif (subop == 7):
         temp = (vy - vx)
+        if (vy >= vx): vf = 1
     elif (subop == 0xE):
-        temp = (vx << 1)
-        vf = (vx & 0x80)>>7
-
-
-
-
-
+        temp = (vy << 1)
+        vf = (vy & 0x80)>>7
+    i.V[register_x] = temp % MODBYTE
+    i.V[0xF] = vf
+    return
 
 # 9XY0 - Skip the following instruction if the value of register VX is not equal to the value of register VY
 def group_9(i, register_x, register_y):
@@ -89,8 +90,38 @@ def group_B(i, address):
     i.PC = (address + i.V[0]) % MEMSIZE
 
 # CXKK	Set VX to a random number with a mask of KK
-def group_C(i, register, lower_byte):
-    i.V[register] == random.randint(0, MODBYTE-1) & lower_byte:
+def group_C(i, register_x, lower_byte):
+    i.V[register_x] == random.randint(0, MODBYTE-1) & lower_byte
 
-def groupF(i, vx, vy, subop):
-    pass
+ #FXPP - Complex Instructions Operand Vx, Subinstruction PP
+def group_F(i, register_x, subop):
+    vx = i.V[register_x] % MODBYTE
+    temp = 0
+    if (subop == 0x07):
+        i.V[register_x] = delay_timer.get_time()
+    elif (subop == 0x0A):
+        #keypress to be inmplemented
+    elif (subop == 0x15):
+        delay_timer.set_time(vx)
+    elif (subop == 0x18):
+        sound_timer.set_time(vx)
+    elif (subop == 0x1E):
+        i.I += vx
+    elif (subop == 0x29):
+        i.I = HEXFONT_BASE + (vx & NIBMASK)
+    elif (subop == 0x33):
+        digit2 = vx // 100
+        digit1 = (vx % 100) // 10
+        digit0 = vx % 10
+        i.setmem(i.I, digit2)
+        i.setmem(i.I+1, digit1)
+        i.setmem(i.I+2, digit0)
+    elif (subop == 0x55):
+        for index in range((register_x+1)&NIBMASK):
+            i.setmem(i.I,i.V[index])
+            i.I += 1
+    elif (subop == 0x65):
+        for index in range((register_x+1)&NIBMASK):
+            i.V[index] = i.getmem(i.I)
+            i.I += 1
+    return

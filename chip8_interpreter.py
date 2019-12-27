@@ -1,6 +1,6 @@
 # Python emulator for Chip-8
 import random
-import constants
+from constants import *
 
 class Interpreter():
     def __init__(self):
@@ -67,4 +67,4 @@ while True:
     if (i.Instr_HH == 0xA):  #Set I = NNN
         i.I = (i.Instr_HL*MODBYTE + i.Instr_L) % MEMSIZE
 
-"""
+
