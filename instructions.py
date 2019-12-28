@@ -16,6 +16,9 @@ def group_0(i, lower_byte, graphics):
         # 0NNN - Execute machine language subroutine at address NNN
         raise InstructionError("Instruction 0NNN not implemented.")
 
+def group_1(i, address):
+    i.PC = address % MEMSIZE
+
 # 2NNN - Execute subroutine starting at address NNN
 def group_2(i, address):
     i.stack.append(i.PC)
