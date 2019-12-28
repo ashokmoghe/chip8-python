@@ -95,7 +95,7 @@ def group_B(i, address):
 
 # CXKK	Set VX to a random number with a mask of KK
 def group_C(i, register_x, lower_byte):
-    i.V[register_x] == random.randint(0, MODBYTE-1) & lower_byte
+    i.V[register_x] = random.randint(0, MODBYTE-1) & lower_byte
 
 def group_E(i, register_x, lower_byte):
     keypress = None
@@ -132,9 +132,10 @@ def group_F(i, register_x, subop, deltimer):
         digit2 = vx // 100
         digit1 = (vx % 100) // 10
         digit0 = vx % 10
-        i.setmem(i.I, digit2)
-        i.setmem(i.I+1, digit1)
-        i.setmem(i.I+2, digit0)
+        addr = i.I % MEMSIZE
+        i.memory[addr] = digit2 & BYTEMASK
+        i.memory[addr + 1] = digit1 & BYTEMASK
+        i.memory[addr + 2] = digit0 & BYTEMASK
     elif (subop == 0x55):
         for index in range((register_x+1)&NIBMASK):
             i.setmem(i.I,i.V[index])

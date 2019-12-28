@@ -47,7 +47,14 @@ timetick.start()
 delay_timer_t = threaded_timers.Timer()
 delay_timer_t.start()
 
-print(i.memory[0x200:0x220].hex())
+i.memory[0x200] = 0xCA
+i.memory[0x201] = 0xFF
+i.memory[0x202] = 0xA2
+i.memory[0x203] = 0x20
+i.memory[0x204] = 0xFA
+i.memory[0x205] = 0x33
+
+print(i.memory[0x200:0x206].hex())
 
 while True:
     i.Ifetch()
@@ -89,25 +96,7 @@ while True:
         group_F(i, i.Instr_HL, i.Instr_L, delay_timer_t)
 
 #    print(i.PC, i.Instr_H, i.Instr_L, i.Instr_HH, i.Instr_HL, i.Instr_LH, i.Instr_LL)
-#    if i.PC == 0x220:
-#      break
-
-i.V[7] = 64
-
-group_F(i, 7, 0x15, delay_timer_t)
-k = 1
-while (k !=0):
-    group_F(i, 8, 7, delay_timer_t)
-    k = i.V[8]
-
+    if i.PC == 0x206:
+        break
+print(i.memory[0x220:0x22F].hex())
 print('done')
-
-# This is the main exec loop. Simple Opcodes are handled here immediately.
-# Complex Opcodes '8', 'F' are delegated to the object
-#
-
-
-
-
-
-
