@@ -97,6 +97,19 @@ def group_B(i, address):
 def group_C(i, register_x, lower_byte):
     i.V[register_x] == random.randint(0, MODBYTE-1) & lower_byte
 
+def group_E(i, register_x, lower_byte):
+    keypress = None
+    # EX9E - Skip the following instruction if the key corresponding to the hex value currently stored in register VX is pressed
+    if lower_byte == 0x9E:
+        if keypress == i.V[register_x]:
+            i.skip()
+    # EXA1 - Skip the following instruction if the key corresponding to the hex value currently stored in register VX is not pressed
+    elif lower_byte == 0xA1:
+        if keypress != i.V[register_x]:
+            i.skip()
+    else:
+        raise InstructionError("Invalid lower byte for group E.")
+
  #FXPP - Complex Instructions Operand Vx, Subinstruction PP
 def group_F(i, register_x, subop, deltimer):
     vx = i.V[register_x] % MODBYTE
