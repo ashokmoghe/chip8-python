@@ -1,6 +1,11 @@
 # Python emulator for Chip-8
 import random
 from constants import *
+import threading
+from timers import *
+import threaded_timers
+from instructions import *
+
 
 class Interpreter():
     def __init__(self):
@@ -34,6 +39,14 @@ class Interpreter():
 
 # initialize chip8
 i = Interpreter()
+delay_timer = Timer()
+#get the time tick going
+timetick = threading.Thread(target=tick_function, args=(1, delay_timer))
+timetick.start()
+# threaded timer
+delay_timer_t = threaded_timers.Timer()
+delay_timer_t.start()
+
 print(i.memory[0x200:0x220].hex())
 
 while True:
@@ -44,10 +57,20 @@ while True:
     if i.PC == 0x220:
       break
 
+i.V[7] = 255
+
+group_F(i, 7, 15, delay_timer)
+k=1
+while (k !=0):
+    group_F(i, 8, 7, delay_timer)
+    k = i.V[8]
+
+print('done')
+
 # This is the main exec loop. Simple Opcodes are handled here immediately.
 # Complex Opcodes '8', 'F' are delegated to the object
 #
-
+"""
     if (i.Instr_HH == 3):    #Skip if Vx == KK
         if (i.V[i.Instr_HL] == i.Instr_L):
             i.skip()
@@ -66,5 +89,6 @@ while True:
             i.skip()
     if (i.Instr_HH == 0xA):  #Set I = NNN
         i.I = (i.Instr_HL*MODBYTE + i.Instr_L) % MEMSIZE
+"""
 
 

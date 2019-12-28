@@ -1,5 +1,6 @@
 import random
 from constants import *
+from timers import *
 
 class InstructionError(Exception):
     pass
@@ -94,17 +95,19 @@ def group_C(i, register_x, lower_byte):
     i.V[register_x] == random.randint(0, MODBYTE-1) & lower_byte
 
  #FXPP - Complex Instructions Operand Vx, Subinstruction PP
-def group_F(i, register_x, subop):
+def group_F(i, register_x, subop, deltimer):
     vx = i.V[register_x] % MODBYTE
     temp = 0
     if (subop == 0x07):
-        i.V[register_x] = delay_timer.get_time()
+        i.V[register_x] = deltimer.get_time()
     elif (subop == 0x0A):
+        pass
         #keypress to be inmplemented
     elif (subop == 0x15):
-        delay_timer.set_time(vx)
+        deltimer.set_time(vx)
     elif (subop == 0x18):
-        sound_timer.set_time(vx)
+  #      sound_timer.set_time(vx)
+        pass
     elif (subop == 0x1E):
         i.I += vx
     elif (subop == 0x29):
