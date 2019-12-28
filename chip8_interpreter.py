@@ -53,9 +53,44 @@ while True:
     i.Ifetch()
  #   i.decode()
  #   i.execute()
-    print(i.PC, i.Instr_H, i.Instr_L, i.Instr_HH, i.Instr_HL, i.Instr_LH, i.Instr_LL)
-    if i.PC == 0x220:
-      break
+    if (i.Instr_HH == 0):   # group 0
+        group_0(i, i.Instr_L, None)
+    elif (i.Instr_HH == 1):
+        address = (i.Instr_HL*MODBYTE + i.Instr_L) % MEMSIZE
+        group_1(i, address)
+    elif (i.Instr_HH == 2):
+        address = (i.Instr_HL*MODBYTE + i.Instr_L) % MEMSIZE
+        group_2(i, address)
+    elif (i.Instr_HH == 3):
+        group_3(i, i.Instr_HL, i.Instr_L)
+    elif (i.Instr_HH == 4):
+        group_4(i, i.Instr_HL, i.Instr_L)
+    elif (i.Instr_HH == 5):
+        group_5(i, i.Instr_HL, i.Instr_LH)
+    elif (i.Instr_HH == 6):
+        group_6(i, i.Instr_HL, i.Instr_L)
+    elif (i.Instr_HH == 7):
+        group_7(i, i.Instr_HL, i.Instr_L)
+    elif (i.Instr_HH == 8):
+        group_8(i, i.Instr_HL, i.Instr_LH, i.Instr_LL)
+    elif (i.Instr_HH == 9):
+        group_9(i, i.Instr_HL, i.Instr_LH)
+    elif (i.Instr_HH == 0xA):
+        address = (i.Instr_HL*MODBYTE + i.Instr_L) % MEMSIZE
+        group_A(i, address)
+    elif (i.Instr_HH == 0xB):
+        address = (i.Instr_HL*MODBYTE + i.Instr_L) % MEMSIZE
+        group_B(i, address)
+    elif (i.Instr_HH == 0xC):
+        group_C(i, i.Instr_HL, i.Instr_L)
+    elif (i.Instr_HH == 0xE):
+        group_E(i, i.Instr_HL, i.Instr_L)
+    elif (i.Instr_HH == 0xF):
+        group_F(i, i.Instr_HL, i.Instr_L, delay_timer_t)
+
+#    print(i.PC, i.Instr_H, i.Instr_L, i.Instr_HH, i.Instr_HL, i.Instr_LH, i.Instr_LL)
+#    if i.PC == 0x220:
+#      break
 
 i.V[7] = 64
 
@@ -70,25 +105,9 @@ print('done')
 # This is the main exec loop. Simple Opcodes are handled here immediately.
 # Complex Opcodes '8', 'F' are delegated to the object
 #
-"""
-    if (i.Instr_HH == 3):    #Skip if Vx == KK
-        if (i.V[i.Instr_HL] == i.Instr_L):
-            i.skip()
-    if (i.Instr_HH == 4):    #Skip if Vx != KK
-        if (i.V[i.Instr_HL] != i.Instr_L):
-            i.skip()
-    if (i.Instr_HH == 5):    #Skip if Vx == Vy
-        if (i.V[i.Instr_HL] == i.V[i.Instr_LH]):
-            i.skip()
-    if (i.Instr_HH == 6):    #Set Vx = KK
-        i.V[i.Instr_HL] = i.Instr_L
-    if (i.Instr_HH == 7):    #Set Vx = Vx + KK
-        i.V[register_x] = (i.V[register_x]  + i.Instr_L) % MODBYTE
-    if (i.Instr_HH == 9):    #Skip if Vx != Vy
-        if (i.V[i.Instr_HL] == i.V[i.Instr_LH]):
-            i.skip()
-    if (i.Instr_HH == 0xA):  #Set I = NNN
-        i.I = (i.Instr_HL*MODBYTE + i.Instr_L) % MEMSIZE
-"""
+
+
+
+
 
 
