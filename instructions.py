@@ -138,8 +138,8 @@ def group_F(i, register_x, subop, deltimer):
         i.memory[addr + 2] = digit0 & BYTEMASK
     elif (subop == 0x55):
         for index in range((register_x+1)&NIBMASK):
-            i.setmem(i.I,i.V[index])
-            i.I += 1
+            i.memory[i.I] = i.V[index] & BYTEMASK
+            i.I = (i.I + 1) % MEMSIZE
     elif (subop == 0x65):
         for index in range((register_x+1)&NIBMASK):
             i.V[index] = i.getmem(i.I)
