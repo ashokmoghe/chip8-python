@@ -99,14 +99,14 @@ def group_F(i, register_x, subop, deltimer):
     vx = i.V[register_x] % MODBYTE
     temp = 0
     if (subop == 0x07):
-        i.V[register_x] = deltimer.get_time()
+        i.V[register_x] = deltimer.get_timer()
     elif (subop == 0x0A):
         pass
         #keypress to be inmplemented
     elif (subop == 0x15):
-        deltimer.set_time(vx)
+        deltimer.set_timer(vx)
     elif (subop == 0x18):
-  #      sound_timer.set_time(vx)
+  #      sound_timer.set_timer(vx)
         pass
     elif (subop == 0x1E):
         i.I += vx

@@ -57,12 +57,12 @@ while True:
     if i.PC == 0x220:
       break
 
-i.V[7] = 255
+i.V[7] = 64
 
-group_F(i, 7, 15, delay_timer)
-k=1
+group_F(i, 7, 0x15, delay_timer_t)
+k = 1
 while (k !=0):
-    group_F(i, 8, 7, delay_timer)
+    group_F(i, 8, 7, delay_timer_t)
     k = i.V[8]
 
 print('done')

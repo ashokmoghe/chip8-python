@@ -8,7 +8,7 @@ from constants import *
 
 class Timer(threading.Thread):
     def __init__(self, value=0x0):
-        super().__init__(self)
+        super().__init__()
         self.timereg = value
 
     def set_timer(self, value):
